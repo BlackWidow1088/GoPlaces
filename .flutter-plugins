@@ -1,0 +1,15 @@
+cloud_firestore=/home/abhijeet/flutter/flutter_linux_v1.7.8+hotfix.4-stable/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-0.9.7+2/
+firebase_auth=/home/abhijeet/flutter/flutter_linux_v1.7.8+hotfix.4-stable/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-0.8.3/
+firebase_core=/home/abhijeet/flutter/flutter_linux_v1.7.8+hotfix.4-stable/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.3.1+1/
+firebase_messaging=/home/abhijeet/flutter/flutter_linux_v1.7.8+hotfix.4-stable/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-4.0.0+1/
+firebase_storage=/home/abhijeet/flutter/flutter_linux_v1.7.8+hotfix.4-stable/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage-2.1.0+1/
+flutter_video_compress=/home/abhijeet/flutter/flutter_linux_v1.7.8+hotfix.4-stable/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_video_compress-0.3.7+8/
+geocoder=/home/abhijeet/flutter/flutter_linux_v1.7.8+hotfix.4-stable/flutter/.pub-cache/hosted/pub.dartlang.org/geocoder-0.2.1/
+google_maps_flutter=/home/abhijeet/flutter/flutter_linux_v1.7.8+hotfix.4-stable/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-0.5.20+6/
+google_sign_in=/home/abhijeet/flutter/flutter_linux_v1.7.8+hotfix.4-stable/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-4.0.1+1/
+image_picker=/home/abhijeet/flutter/flutter_linux_v1.7.8+hotfix.4-stable/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.6.1+3/
+location=/home/abhijeet/flutter/flutter_linux_v1.7.8+hotfix.4-stable/flutter/.pub-cache/hosted/pub.dartlang.org/location-2.3.3/
+path_provider=/home/abhijeet/flutter/flutter_linux_v1.7.8+hotfix.4-stable/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-0.5.0+1/
+shared_preferences=/home/abhijeet/flutter/flutter_linux_v1.7.8+hotfix.4-stable/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.5.1+2/
+sqflite=/home/abhijeet/flutter/flutter_linux_v1.7.8+hotfix.4-stable/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite-1.1.6+3/
+video_player=/home/abhijeet/flutter/flutter_linux_v1.7.8+hotfix.4-stable/flutter/.pub-cache/hosted/pub.dartlang.org/video_player-0.10.1+6/
