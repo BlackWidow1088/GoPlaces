@@ -1,0 +1,17 @@
+{
+  "name": "auth",
+  "version": "2.0.0",
+  "description": "Authentication server for Go Places. Will load the initial page for web application",
+  "main": "sw.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "express": "^4.16.2",
+    "web-push": "^3.2.5"
+  }
+}
