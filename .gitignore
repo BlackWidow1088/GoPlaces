@@ -2,4 +2,4 @@
 build
 node_modules
 **/proxy/website
-**/app/website
+**/app/appsite
