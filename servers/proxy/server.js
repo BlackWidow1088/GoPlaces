@@ -18,8 +18,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');//Parse JSON requests
 const path = require('path');
-app.use(express.static(path.join(__dirname, 'build_website')));
-app.use(express.static(path.join(__dirname, 'build_app')));
+app.use(express.static(path.join(__dirname, 'website')));
 // app.use(express.static(path.join(__dirname, 'website')));
 // This serves static files from the specified directory
 // app.use(express.static('../app'));
@@ -29,7 +28,6 @@ app.use(express.urlencoded());
 // Parse JSON bodies (as sent by API clients)
 app.use(express.json());
 
-app.get('/', (req,res) => res.sendFile(path.join(__dirname, 'build_app/index.html')));
 // app.get('*', (req, res) => {
 //     res.sendFile(path.join(__dirname, 'website/index.html'));
 // });
