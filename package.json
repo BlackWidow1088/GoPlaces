@@ -1,0 +1,17 @@
+{
+  "name": "scripts",
+  "version": "2.0.0",
+  "description": "script for running all servers and apps",
+  "main": "sw.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "website_build": "cd website && npm run build && cd ..",
+    "appsite_build": "cd appsite && npm run build && cd ..",
+    "start-dev": "cd servers && npm run start-dev && cd .."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+  },
+  "devDependencies": {}
+}

@@ -19,6 +19,9 @@ const isLocalhost = Boolean(
       /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
     )
 );
+navigator.serviceWorker.ready.then(registration => {
+  console.log('called');
+});
 
 export function register(config) {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
@@ -32,6 +35,9 @@ export function register(config) {
     }
 
     window.addEventListener('load', () => {
+      // if the token is valid then navigate to the appsite
+      // window.location.replace('http://localhost:8082');
+
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 
       if (isLocalhost) {
@@ -58,6 +64,8 @@ function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
+      // TODO: problem with this approach is update callbacks not called if redirected
+      config.onWebsiteLoad(registration);
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
         if (installingWorker == null) {

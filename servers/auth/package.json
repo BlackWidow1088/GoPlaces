@@ -9,9 +9,12 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "cookie-parser": "^1.4.4",
+    "fs": "0.0.1-security",
+    "jsonwebtoken": "^8.5.1"
+  },
   "devDependencies": {
-    "express": "^4.16.2",
-    "web-push": "^3.2.5"
+    "express": "^4.16.2"
   }
 }

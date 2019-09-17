@@ -1,5 +1,5 @@
 # production
 build
 node_modules
-**/proxy/website
-**/app/appsite
+**/nginx/website
+**/nginx/appsite

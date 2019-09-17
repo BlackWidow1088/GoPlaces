@@ -13,20 +13,42 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
+const env = require('../env');
 const express = require('express');
+const webpush = require('web-push');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const tokenMiddleware = require('./checkToken.middleware');
+const vapidKeys = {
+  "publicKey": "BEsG2x5tWdnlWiuziUTmNIKDhEdYmwJBqqg8xVoHuTwi3dnNhHhFiPC_RnqHjgx2xW_4im9ypuJz3gf_s1pGueE",
+  "privateKey": "EKCIg0owHSSzLAb5Y9ZUQWw44uoJwwZM9K1hZqvajh4"
+};
+
 const app = express();
 
+webpush.setVapidDetails(
+  'mailto:chavan.abhijeet1088@gmail.com',
+  vapidKeys.publicKey,
+  vapidKeys.privateKey
+);
 // This serves static files from the specified directory
-// app.use(express.static('../app'));
+
+app.use(cookieParser());
 // Parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded());
 
 // Parse JSON bodies (as sent by API clients)
 app.use(express.json());
-app.get('/', (req,res) => res.send({success: true}));
 
-const server = app.listen(8081, () => {
+const readData = function (req, res) {
+  res.status(200).json({status: true});
+}
+app.route('/app')
+  .get(tokenMiddleware.checkToken, readData);
+
+
+
+const server = app.listen(env.app, () => {
 
   const host = server.address().address;
   const port = server.address().port;

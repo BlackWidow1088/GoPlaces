@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+    <body>
+        indexDB tuts
+        <button onclick="getData()">Get</button>
+        <button onclick="addData()">Add</button>
+        <script>
+        var configureStore = () => ({
+        storeName: 'goplaces',
+        version: '1',
+        authUrl: 'http://localhost:8081/auth',
+        loggerUrl: 'http://localhost:8083/log',
+    });
+class IndexDBService {
+    storeOptions;
+    db;
+    constructor() {
+        this.storeOptions = configureStore();
+        var openRequest = indexedDB.open('goplaces', 1);
+        openRequest.onupgradeneeded = (e) => {
+          this.db = e.target.result;
+          if (!this.db.objectStoreNames.contains('auth')) {
+            this.db.createObjectStore('auth',
+              {keyPath: 'email'});
+          }
+        };
+        openRequest.onsuccess = (e) => {
+          console.log('running onsuccess');
+          this.db = e.target.result;
+        };
+        openRequest.onerror = (e) => {
+        // TODO:   report to logger server
+        };
+    }
+
+    add(data, successCallback, errorCallback) {
+        var transaction = this.db.transaction('auth', 'readwrite');
+        var auth = transaction.objectStore('auth');
+        var item = {
+        //   email: 'chavan.abhijeet1088@gmail.com',
+        //   token: '123',
+        email: data.email,
+          created: new Date().getTime()
+        };
+      
+       var request = auth.add(item);
+      
+       request.onerror = function(e) {
+        //   console.log('Error', e.target.error.email);
+        // TODO:   report to logger server
+        console.log('error ', e)
+        errorCallback(e);
+        };
+        request.onsuccess = function(e) {
+            console.log('success ', e)
+            successCallback(e);
+        };
+    }
+    get(successCallback, errorCallback) {
+        var tx = this.db.transaction('auth', 'readonly');
+        var store = tx.objectStore('auth');
+        var request = store.getAll();
+        request.onerror = function(e) {
+        // TODO:   report to logger server
+        errorCallback(e);
+        };
+        request.onsuccess = function() {
+            successCallback(request.result);
+        }
+    }
+}
+var cntr=0;
+var idb = new IndexDBService();
+function getDetails(obj) {
+    console.log('got values ', obj);
+}
+function getData() {
+    idb.get(getDetails, () => {});
+}
+function addData() {
+    idb.add({email: 'chavan_abhijeet@ymail.com'+cntr}, getDetails, () => {});
+    cntr++;
+}
+        </script>
+    </body>
+</html>

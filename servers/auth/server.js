@@ -13,27 +13,64 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
+const env = require('../env');
 const express = require('express');
-const app = express();
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
-// This serves static files from the specified directory
-// app.use(express.static('../app'));
+const TIMEOUT = '604800000';
+const RSA_PRIVATE_KEY = fs.readFileSync(path.join(__dirname, './keys/private.key'));
+
+const app = express();
+app.use(express.static(path.join(__dirname, './public')));
+app.use(cookieParser());
 // Parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded());
 
 // Parse JSON bodies (as sent by API clients)
 app.use(express.json());
-app.get('/app', (req,res) => res.send({success: true}));
-// app.use('/', (req, res) => {
-//   return res.redirect('https://www.google.com');
-// })
-// app.use('/', (req, res) => express.static('./build'));
-// app.get('/app', (req, res) => console.log('hello'));
+app.route('/auth')
+  .post(loginRoute);
 
-// app.get('/', express.static(['./build', './build/static']));
 
-const server = app.listen(8081, () => {
+
+function loginRoute(req, res) {
+  const email = req.body.email,
+    password = req.body.password;
+
+  if (validateEmailAndPassword({ email, password })) {
+    const userId = findUserIdForEmail(email);
+
+    const jwtBearerToken = jwt.sign({}, RSA_PRIVATE_KEY, {
+      algorithm: 'RS256',
+      expiresIn: TIMEOUT,
+      subject: userId
+    });
+    const token = {
+      idToken: jwtBearerToken,
+      expiresIn: TIMEOUT
+    };
+    res.cookie('goplaces', JSON.stringify(token), { maxAge: TIMEOUT, httpOnly: true });
+    res.status(200).json(token);
+  } else {
+    // send status 401 Unauthorized
+    res.sendStatus(401);
+  }
+}
+
+function findUserIdForEmail(email) {
+  return 'abhijeet';
+}
+function validateEmailAndPassword(details) {
+  if (details.email === 'a' && details.password === 'a') {
+    return true;
+  }
+  return false;
+}
+
+const server = app.listen(env.auth, () => {
 
   const host = server.address().address;
   const port = server.address().port;

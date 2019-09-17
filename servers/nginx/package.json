@@ -1,0 +1,17 @@
+{
+  "name": "reverse-proxy",
+  "version": "2.0.0",
+  "description": "reverse proxy server for navigating to sites. will be replaced by nginx reverse proxy",
+  "main": "sw.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-dev": "node reverse_proxy"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "express": "^4.16.2",
+    "http-proxy": "^1.17.0"
+  }
+}

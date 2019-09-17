@@ -1,18 +1,19 @@
 {
-  "name": "proxy",
+  "name": "servers",
   "version": "2.0.0",
-  "description": "proxy server for navigating to other sites",
+  "description": "script for running all servers",
   "main": "sw.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server"
+    "start-dev": "concurrently \"cd nginx && npm run start-dev && cd .. \"  \"node auth/server\"  \"node app/server\""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0"
+    "concurrently": "^4.1.2"
   },
   "devDependencies": {
     "express": "^4.16.2"
   }
 }
+
