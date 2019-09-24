@@ -3,3 +3,5 @@ build
 node_modules
 **/nginx/website
 **/nginx/appsite
+golang
+go_servers/bin

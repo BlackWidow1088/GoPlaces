@@ -42,6 +42,10 @@ class AuthService {
         //         console.log(data);
         //     });
     }
+
+    async thirdPartyLogin() {
+        const response = await axios.post()
+    }
 }
 
 export default new AuthService();

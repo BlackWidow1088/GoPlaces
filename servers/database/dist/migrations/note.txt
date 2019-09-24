@@ -1,0 +1,23 @@
+npm install sequelize-cli -g 
+
+npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string
+
+
+$ npx sequelize-cli db:migrate
+
+You can use db:migrate:undo, this command will revert most recent migration.
+$ npx sequelize-cli db:migrate:undo
+
+You can revert back to initial state by undoing all migrations with db:migrate:undo:all command. You can also revert back to a specific migration by passing its name in --to option.
+$ npx sequelize-cli db:migrate:undo:all --to XXXXXXXXXXXXXX-create-posts.js
+
+
+adding migration
+npx sequelize-cli migration:create --name name_of_your_migration
+
+
+
+installing postgis
+sudo apt update
+sudo apt install postgresql-11-postgis-2.5
+sudo apt install postgresql-11-postgis-scripts
