@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-const env = require('../env');
+import _ from './app-config';
 const express = require('express');
 const webpush = require('web-push');
 const path = require('path');
@@ -48,7 +48,7 @@ app.route('/app')
 
 
 
-const server = app.listen(env.app, () => {
+const server = app.listen(process.env.app, () => {
 
   const host = server.address().address;
   const port = server.address().port;

@@ -13,14 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-const env = require('../env');
+import _ from './app-config';
 const path = require('path');
 
 const expressApp = require('express');
 const app = expressApp();
 app.use('/', expressApp.static('./appsite'));
 app.use('/static', expressApp.static('./appsite/static'));
-const serverApp = app.listen(env.appsite, () => {
+const serverApp = app.listen(process.env.appsite, () => {
 
     const host = serverApp.address().address;
     const port = serverApp.address().port;
@@ -32,7 +32,7 @@ const expressWeb = require('express');
 const web = expressWeb();
 web.use('/', expressWeb.static('./website'));
 web.use('/static', expressWeb.static('./website/static'));
-const serverWeb = web.listen(env.website, () => {
+const serverWeb = web.listen(process.env.website, () => {
 
     const host = serverWeb.address().address;
     const port = serverWeb.address().port;
@@ -53,14 +53,15 @@ var httpProxy = require('http-proxy');
 // NOTE: will be replaced by nginx configs
 // NOTE: these web urls for app, auth and website cannot be accessed from any client side
 var APP_PATHS = ['/app'];
-var APP_URL = `${env.domain}:${env.app}`;
+var APP_URL = `${process.env.domain}:${process.env.app}`;
 
 var AUTH_PATHS = ['/auth'];
-var AUTH_URL =  `${env.domain}:${env.auth}`;
+var AUTH_URL =  `${process.env.domain}:${process.env.auth}`;
 
 var SITE_PATHS = ['/'];
-var WEBSITE_URL =  `${env.domain}:${env.website}`;
-var APPSITE_URL =  `${env.domain}:${env.appsite}`;
+var WEBSITE_URL =  `${process.env.domain}:${process.env.website}`;
+var APPSITE_URL =  `${process.env.domain}:${process.env.appsite}`;
+var target = WEBSITE_URL;
 
 var proxy = httpProxy.createProxyServer({ changeOrigin: true });
 var server = http.createServer(function (req, res) {
@@ -68,8 +69,6 @@ var server = http.createServer(function (req, res) {
     if (req.url.startsWith(SITE_PATHS[i])) {
     if(req.headers.cookie) {
       target = APPSITE_URL;
-    } else {
-      target = WEBSITE_URL;
     }
     break;
     }
@@ -95,6 +94,6 @@ var server = http.createServer(function (req, res) {
 
 });
 
-console.log('Proxy Server listening on port');
-server.listen(env.reverse_proxy);
+console.log('Proxy Server listening on port ', process.env.reverse_proxy);
+server.listen(process.env.reverse_proxy);
 

@@ -1,18 +1,21 @@
 
 import React, { Component } from 'react';
 import authService from '../../services/auth.service';
-import storeOptions from '../env';
+import FacebookLogin from 'react-facebook-login';
+import { GoogleLogin } from 'react-google-login';
 
 class ThirdPartyLogin extends Component {
     render() {
+        console.log(process.env);
+        console.log('google id' ,process.env.REACT_APP_google_client_id);
         return <div>
             <FacebookLogin
-                appId={storeOptions.FACEBOOK_APP_ID}
+                appId={process.env.REACT_APP_facebook_app_id}
                 autoLoad={false}
                 fields="name,email,picture"
                 callback={this.facebookResponse} />
             <GoogleLogin
-                clientId={storeOptions.GOOGLE_CLIENT_ID}
+                clientId={process.env.REACT_APP_google_client_id}
                 buttonText="Login"
                 onSuccess={this.googleResponse} />
         </div>

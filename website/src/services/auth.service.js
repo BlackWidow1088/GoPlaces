@@ -1,5 +1,4 @@
 import indexDBService from './indexDB.service';
-import storeOptions from '../env';
 import axios from 'axios';
 class AuthService {
     async redirect() {
@@ -15,7 +14,7 @@ class AuthService {
     }
 
     async login({ email, password }) {
-        const response = await axios.post(storeOptions.authUrl, { email: email, password: password });
+        const response = await axios.post(process.env.REACT_APP_authUrl, { email: email, password: password });
         const data = await response.data;
         indexDBService.update({email: email, ...data}).then(e => {
             this.redirect();

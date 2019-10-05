@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
-const env = require('../env');
 const jwksRsa = require('jwks-rsa');
 
 let checkToken = (req, res, next) => {
@@ -19,7 +18,7 @@ let checkToken = (req, res, next) => {
   const client = jwksRsa({
     rateLimit: true,
     jwksRequestsPerMinute: 10, // Default value
-    jwksUri: `${env.domain}:${env.auth}/public.json`
+    jwksUri: `${process.env.domain}:${process.env.auth}/public.json`
   });
   let RSA_PUBLIC_KEY = 'key null';
 

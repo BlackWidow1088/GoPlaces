@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-  const UserDetails = sequelize.define('UserDetails', {
+  var UserDetails = sequelize.define('UserDetails', {
     location: DataTypes.GEOGRAPHY('POINTZM', 4326)
   }, {
     tableName: 'AllUserDetails',

@@ -1,5 +1,9 @@
 'use strict';
 
+
+// const parent = path.resolve(__dirname, '../../');
+// dotenv.config({ path: path.join(parent, '.env') });
+
 const fs = require('fs');
 const path = require('path');
 const paths = require('./paths');
@@ -24,7 +28,6 @@ var dotenvFiles = [
   NODE_ENV !== 'test' && `${paths.dotenv}.local`,
   paths.dotenv,
 ].filter(Boolean);
-
 // Load environment variables from .env* files. Suppress warnings using silent
 // if this file is missing. dotenv will never modify any environment variables
 // that have already been set.  Variable expansion is supported in .env files.

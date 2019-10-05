@@ -1,7 +1,7 @@
 {
   "name": "database",
   "version": "2.0.0",
-  "description": "Database Manager for Go Places using Sequelize ORM",
+  "description": "Database Manager for Go Places using Sequelize ORM. This is not a typical server. Used by the database admin to update the database",
   "main": "config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -13,12 +13,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@babel/cli": "^7.6.0",
-    "@babel/core": "^7.6.0",
-    "@babel/node": "^7.6.1",
-    "@babel/polyfill": "^7.6.0",
-    "@babel/preset-env": "^7.6.0",
-    "@babel/preset-react": "^7.0.0",
     "dotenv": "^8.1.0",
     "make-runnable": "^1.3.6",
     "pg": "^7.12.1",
@@ -26,5 +20,11 @@
     "sequelize": "^5.19.0",
     "rimraf": "^3.0.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
+    "@babel/node": "^7.6.1",
+    "@babel/polyfill": "^7.6.0",
+    "@babel/preset-env": "^7.6.0"
+  }
 }

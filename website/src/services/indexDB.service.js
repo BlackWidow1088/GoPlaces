@@ -1,8 +1,7 @@
-import storeOptions from '../env';
 class IndexDBService {
     db;
     constructor() {
-        var openRequest = indexedDB.open(storeOptions.storeName, storeOptions.version);
+        var openRequest = indexedDB.open(process.env.REACT_APP_storeName, process.env.REACT_APP_version);
         openRequest.onupgradeneeded = (e) => {
             this.db = e.target.result;
             if (!this.db.objectStoreNames.contains('auth')) {
@@ -88,7 +87,7 @@ class IndexDBService {
                 // TODO:   report to logger server
                 reject(e);
             };
-            request.onsuccess = function () {
+            request.onsuccess = function (e) {
                 resolve(request.result);
             }
         });
