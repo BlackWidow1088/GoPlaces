@@ -5,3 +5,4 @@ node_modules
 **/nginx/appsite
 golang
 go_servers/bin
+dist
