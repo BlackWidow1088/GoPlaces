@@ -1,4 +1,4 @@
-import _ from './app-config';
+import _ from './config';
 import models from './models';
 
 

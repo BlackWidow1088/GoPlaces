@@ -6,8 +6,6 @@ import { GoogleLogin } from 'react-google-login';
 
 class ThirdPartyLogin extends Component {
     render() {
-        console.log(process.env);
-        console.log('google id' ,process.env.REACT_APP_google_client_id);
         return <div>
             <FacebookLogin
                 appId={process.env.REACT_APP_facebook_app_id}

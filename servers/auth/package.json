@@ -6,9 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log,./package-lock.json --copy-files",
-    "start": "npm run build && node --require dotenv/config dist/server.js",
-    "empty_database": "node --require dotenv/config src/models/init.db dropTables",
-    "create_database": "node --require dotenv/config src/models/init.db createTables"
+    "start": "npm run build && node --require dotenv/config dist/server.js"
   },
   "author": "",
   "license": "ISC",

@@ -33,8 +33,8 @@ app.use(express.urlencoded());
 
 // Parse JSON bodies (as sent by API clients)
 app.use(express.json());
-app.route('/auth')
-  .post(loginRoute);
+app.route('/auth/login')
+  .post(loginRoute);  
 
 app.post('/auth/v1/reflections', Reflection.create);
 app.get('/auth/v1/reflections', Reflection.getAll);

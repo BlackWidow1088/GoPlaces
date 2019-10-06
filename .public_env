@@ -1,6 +1,7 @@
 REACT_APP_storeName='goplaces'
 REACT_APP_version='1'
-REACT_APP_authUrl='/auth/'
+REACT_APP_authLoginUrl='/auth/login'
+REACT_APP_authSignupUrl='/auth/signup'
 REACT_APP_authRedirectUrl='/auth/redirect/'
 REACT_APP_appUrl='/app/'
 REACT_APP_loggerUrl='/log/'

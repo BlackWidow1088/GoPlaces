@@ -1,11 +1,11 @@
 
 import React, { Component } from 'react';
 import authService from '../../services/auth.service';
-import './login.scss';
+import './signup.scss';
 
 import { Formik, Field } from 'formik';
 
-class Login extends Component {
+class Signup extends Component {
     renderFields(inputs, form) {
         return inputs.map(input => {
             return (
@@ -49,22 +49,27 @@ class Login extends Component {
         //return initialValues object
         return initialValues;
     }
-    async login(values) {
-        await authService.login({email: values.email, password: values.password});
+    async signup(values) {
+        try{
+            await authService.signup({email: values.email, password: values.password, username: values.username});
+        } catch(ex) {
+            console.log('sign up');
+            console.log(ex);
+        }
     }
     render() {
         const initialValues = this.getInitialValues(this.props.fields);
         return (
-            <div className="gp-login">
+            <div className="gp-signup">
                 <Formik
-                    onSubmit={(values) => { this.login(values); }}
+                    onSubmit={(values) => { this.signup(values); }}
                     validationSchema={this.props.validation}
                     initialValues={initialValues}
                     render={(form) => {
                         return <div>
                             <form onSubmit={form.handleSubmit}>
                                 {this.renderFields(this.props.fields, form)}
-                                <button type='submit' className='gp-submit-btn'>Log In</button>
+                                <button type='submit' className='gp-submit-btn'>Signup</button>
                             </form>
                         </div>
                     }}
@@ -74,4 +79,4 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default Signup;
