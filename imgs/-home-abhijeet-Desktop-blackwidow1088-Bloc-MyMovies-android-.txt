@@ -1,0 +1,1 @@
+/home/abhijeet/Desktop/blackwidow1088/Bloc/MyMovies/android/gradle.properties

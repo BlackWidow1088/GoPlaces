@@ -1,0 +1,65 @@
+evolution of expert 
+1)do it for yourself 2) do it with you 3)you do it, i coach 4) coach together 5)digital eco system
+model (building a community of customers which lasts for life and a ecosystem for them)
+5th point helps in scaling
+
+
+goodd content influencers:
+1) 80% of work done is INFLUENCE Wchich has 3 pillars: a)authentic b)strong logic c)empathy. (connection with people than content)
+2) 15 % depends on income funnel  = 4 stage funnel: stage 1:lead magnet -> tripwire->core product->profit maximiser
+
+eg: online course subject
+lead magnet stage=LIVE webinar,
+Tripwire=L1-Conceptual Course, People who pay money...pay attention..
+Core product=L2-Implementation COurse (13 % percent conversion frpm tripwire to core product)
+profit maximiser=L3-coaching, affliate marketing = tools, high ticket marketing
+
+MSI model of influencers:
+1)own products(gain authority)
+2)affliate marketing(recurring cashflow)
+3)121 coaching(profits and impact)
+
+3) IMPACT 5%: video blueprint = channels to attract people to websites
+
+
+The Diamanti D-Series appliance is purpose-built for containerized applications that combines a
+hyperconverged infrastructure with the performance and efficiency of bare-metal containers. The
+Diamanti software provides a virtualized, clustered approach to network and storage. 
+
+Together, this provides containerized workloads with guaranteed network and storage performance to complement the CPU and memory allocation provided by Linux containers. These guarantees allow more workloads to run on the same class of hardware without sacrificing application
+quality, reliability, or performance.
+
+Diamanti D-Series appliances assure network performance by enforcing performance tiers at the
+network interface for each container.
+ Each container is guaranteed a share of available network
+bandwidth. Similarly, D-Series appliances ensure storage performance through bandwidth, IOPS,
+and latency guarantees. 
+
+These guarantees are enforced in hardware, solving issues related to
+noisy neighbors in multitenancy environments.
+
+CUSTOM nic AND NVME VIRTUALIZATION THROUGH HRADWARE AND FIRMWARE
+kubernetes specific 
+
+
+DCFS:
+Diamanti Converged File System (DCFS) is the distributed storage component of the Diamanti
+cluster. DCFS consists of a highly-available and distributed control plane that scales linearly when
+the number of nodes in the cluster increases.
+DCFS provides application-centric storage features that include mirroring, remote I/O, snapshots,
+and more. DCFS is network aware and automatically reserves network bandwidth as needed to
+maintain application quality of service. DCFS is flash media aware and designed for higher flash
+endurance and predictable I/O latency.
+
+PERFORMANCE TIRES:
+
+
+
+
+
+
+
+
+
+
+

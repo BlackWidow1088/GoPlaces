@@ -1,0 +1,194 @@
+
+sudo vi /etc/vpnc/default.conf
+sudo vpnc
+
+QA Portal (Can be extended to release portal)  should be able to accomodate following :  
+
+Test case management - (Master Data)
+Import test cases from existing Excel sheets.
+Add/Edit/View existing testcases from single portal.
+Test case history (versions)
+Should be able to relate test cases with release/product. 
+Prioritization of test cases should be possible.g
+
+Test Run management - 
+Update test results through automation run. (via Jenkins or manual ran e2e test case)
+Should be able to relate JIRA(s) with failed TCs.
+Update stress test results.
+Ability to update result of manually ran TCs. If TC fails, there should be ability to update JIRA details, and capture logs.(Can be script capturing all activities in terminal)
+	
+
+Reporting :
+Dashboard to see Full/Daily Sanity test results. (Update every test run result )
+TCs with respect to builds (with view of what all issue/enhancements (commits) in respective builds)
+Testcase/Build vise history
+JIRA like dashboard (or JIRA dashboard link)
+
+(Dashboard/Reporting can be extended for multiple combination, if data is available )
+
+
+Notes from meeting  (13th NOV) : 
+There should be a single source of truth. (Test cases should be view/edit/updated from single place )
+We can use RDBMS or CMS for storing data.
+UI to view/update all data
+AI : Come up with the schema to store data
+
+
+
+
+
+
+	
+
+Automation Requirements
+(some notes from discussion with automation team)
+
+1) list TCs are run on which builds.
+2) tc run how many times and status
+3) filter by tc names
+4) import export list of TC through sheets.
+5) lock the TC which are getting tested or developed(manually or automated).
+
+
+DB Schema
+
+Database for Every Different Release
+Table for TC_Information (static)
+TC_ID
+TC_NAME
+Domain
+Scenario
+Description
+Expected Behaviour
+
+Not_Available
+Setup_Info_List
+Sub_Category
+Tag
+Auto_Tc_Name
+Priority (priority of test case to be implemented, fixed)
+Table for BUG (Static)
+Bug_Id (PK)
+TC_Id (FK)
+start_date 
+build
+end_date
+Reporter_Id (FK)
+Assignee_Id (FK)
+
+Table for TC_RESULT (Dynamic)
+TC_ID (FK = foreign key)
+Build numbers (**NOT NEEDED)
+Result of TC for every build (**NOT NEEDED)
+Bugs created by that TC (url) (**NOT NEEDED HERE)
+Url for console log stored in file (**NOT NEEDED HERE)
+Date
+setup info or number (FK) (**NOT NEEDED HERE)
+
+
+sanity_id (FK) (will provide build, setup_info)
+result (specific for the test case)
+Skip
+Table for Aggregate TC State (Dynamic)
+Domain Name (storage, remote)
+Total TC’s
+Automated TC number (% using this field)
+Tested TC number (% using this field)
+Passed TC’s number (% using this field)
+
+Skip
+Carried_on_Setup (FK)
+Table for Sanity Result (Dynamic)
+Sanity ID/Number
+Tag (daily/weekly/Sanity/Manual) (**Manual: save   status of manual test case results**)
+log url 
+Date
+Result
+Setup_Info (FK)
+build 
+Table for FEATURE_INFO
+feature jira id
+feature tested or not
+Reason for not testing feature
+Table for SETUP_INFO
+Setup name(unique key)
+inventory file
+Status (In failed state to debug / not)
+Idle (Someone using or not)
+		
+
+
+
+
+Database for Universal Info:
+Table for USER_INFO
+Owner ID / email
+Owner name
+Designation / permissions (automation/dev)(user/admin)
+Worksheet for eng  (to be updated weekly by eng) (See possibility of integration with teamworks)
+Name/ID (FK)
+Release
+start date
+end date
+column for what he’s working on (refer automation test growth sheet)
+Table for RELEASES
+Release number
+Build numbers (list)
+Bug id’s (list)
+New features info (list)
+Hardware info (NYNJ /Boston)
+Start date
+End date
+Release Date
+Setups used
+Features not to be tested- with reasons
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			UI
+RELEASES PAGE					
+Release number
+Build numbers (link) [latest / all]
+Bug id’s (link) (categorize - high/medium/low) [from jira]
+Progress / TC Coverage (link) (cat - platform / func)
+New features info (list) (sub-tasks)
+Applicable Hardware (NYNJ /Boston) (list)
+Setups used (FK) (auto10, auto8, ..) [done]
+QA Start date (M)
+Targeted Release Date (M)
+Eng employed (FK - Info to be come from the worksheet) (M) (FK)
+Features not to be tested- with reasons (FK) (list) (M)
+Targeted Code freeze date (M)
+Bug Graph ( jira- Automatic)
+Upgrade testing start date (M)
+Upgrade metrics (list) (M)
+Issues faced on customer side (jira - list)
+CUSTOMER USING THIS RELEASE (OPTIONAL) (M)
+EXTRA INFO (M)
+Final release build number
+OS for Final release build number
+Final release Docker core rpm number
+U-boot version
+Start date
+release date
+Hot patches (list) (M)
+patch (jira number)
+customers to be given to
+Eng employed (FK to be come from worksheet)
+Risks / Red Flags (M)
+Automation syncup /,and minutes (M)
+
+
+
+

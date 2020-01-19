@@ -1,0 +1,67 @@
+React
+1)fast due to use of virtual DOM concept
+2)has native support for profiling the application using Profiler component. helpful for generating statistics of application
+3) better documentation than angular
+4) React hooks makes code more granular. depends on the tradeoff between granularity and requirement
+of lifecycle method of React.Component.
+
+Application Layer
+1)2 way binding vs 1 way binding in react/ removes complexity
+2)formik yup better for form handling. trusted by many companies
+3) handling internationalization using i18/i18-next is easier in react than angular. React uses JSX thus making use of native html elements and attributes which helps to tag elements better than angular.
+structural and attribute directives in angular makes handling of internationalization difficult.
+4) integrating with other JS libraries like D3, ChartJS is easy than angular. 
+In Angular need to develop a complex adapter for using these libraries and need to read a lot of
+documentation for developing efficient codebase of integration.
+
+BUsiness Layer
+1) implemented through redux state management. creating classes as wrappers over action-reducers-selectors but need to done manually.
+if used MObX with react which uses observables underneath it, then updates are automatically with 
+observables.
+
+Database Layer
+1) redux, redux saga more efficient for state management. NO need of using RxJS library for handling central store of database
+
+Pub-Sub
+1) using MobX or Redux 
+
+
+
+
+Angular
+1)using typescript natively, so developers are able to write efficienct code than plain javascript.
+REact can also be coded using TYpescript
+2)provides full support of AOT compilation and configuration for production builds. 
+Angular 5 onwards by default we have AOT compiler for production builds.
+implementing in react is easy as the compiler is understood well in react than angular.
+But REact requires to make more use of REact hooks rather than React components.
+
+Application Layer
+1)angular forms available. but 2 way binding becomes hard to debug.
+Also angular doesn;t refresh UI until the object reference hasn;t changes. need to use 
+Object.assign()
+2) implementing route guards is easy and efficient for handling complexity as well.
+Angular 8 has major updates in angular-router as well.
+Handling route guards in react is complex.
+
+Business Layer
+1)dependency injection. services can be injected easily than react.
+2) businesss layer can be splitted into ngmodules. apart from lazy loading, we can provide 
+access modifiers and user based configurations easily in angular than react.
+in react, everything is components, so naming convention of components and using React.Context is the way to achieve same functionality.
+
+Database Layer
+1) also has ngrx-store based on redux principles, but using services with RxJS reactive library more recommended.
+REact has more advantage in this scenario.
+
+Pub-Sub
+1) using REactJS observables and subjects.
+
+
+
+React and Angular
+1) both support composition over inheritance for structuring code.
+As both can compile EcmaScript 2017, we can use class based inheritance and design patterns
+for structuring the code easily.
+2) both support decorators and can be used against mixins for having multiple inheritance.
+ecmascript 7 supports decorators.

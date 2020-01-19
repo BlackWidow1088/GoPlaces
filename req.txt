@@ -1,0 +1,31 @@
+
+
+QA Strategy: 1) human resources 2) Total TCS 3) Upgrade statistics
+
+1) change color to green
+2) move release status card  from dashboard to release summary
+3) remove not tested from tc metrics
+4) order on release status: bugs, upgrade metrics and then features
+
+1) kubernetes demo app
+2) diamanti product
+3) horizontal tree implement
+4) cgroups, namespaces, 
+5) graphql-postgres connect
+
+Cloud (What it is, Different Modes, Usage Models etc)
+Cloud Provider Assignment (Bring details of What all it takes to be a CloudProvider ?)
+Docker, Containers & Pods (with Demo)
+Vagrant (with Demo on vagserv machines)
+Kubernetes (with Demo on vagrant setup)
+Overview of Diamanti Product (User Guide)
+Overview of Diamanti Product (User Guide)
+K8S <-> Diamanti Architecture
+GIT Usage/REST/CRUD
+Diamanti Software Architecture (All modules and interfaces etc)
+Containers, Kubernetes, Dockers, Vagrant, Diamanti
+Diamanti Networking, QoS, Endpoints Aspects
+Diamanti Storage
+Namespace concept and RBAC
+Programming in Go
+Diamanti Troubleshooting/Debugging (Guidelines and tricks)

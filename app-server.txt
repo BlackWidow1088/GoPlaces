@@ -1,0 +1,456 @@
+/**
+ * mock server for serving sunburst data to angular client
+ */
+const express = require('express');
+const jsonfile = require('jsonfile')
+let releases = jsonfile.readFileSync('./releases.json');
+let assignedTCs = jsonfile.readFileSync('./currentAssigned.json');
+// let tcDetail = jsonfile.readFileSync('./tcdetail.json');
+let notifications = jsonfile.readFileSync('./notifications.json');
+let userWork = jsonfile.readFileSync('./userWork.json');
+let users = jsonfile.readFileSync('./users.json');
+let domains = jsonfile.readFileSync('./domains.json');
+let allTcs = jsonfile.readFileSync('./tcDetails.json');
+var jiraHeaders = null;
+var searchArgs = null;
+var Client = require('node-rest-client').Client;
+client = new Client();
+// Provide user credentials, which will be used to log in to JIRA.
+var loginArgs = {
+    data: {
+        "username": "abhijeet",
+        "password": "abhijeet0987!"
+    },
+    headers: {
+        "Content-Type": "application/json"
+    }
+};
+loginJIRA()
+    .then(function (res) {
+        console.log('logged in')
+    }).catch(err => {
+
+    });
+// var jiraReq = client.post("http://dwsjira1.eng.diamanti.com:8080/rest/auth/1/session", loginArgs, function (data, response) {
+//     if (response.statusCode == 200) {
+//         console.log('succesfully logged in, session:', data.session);
+//         var session = data.session;
+//         jiraHeaders = {
+//             cookie: session.name + '=' + session.value,
+//             "Content-Type": "application/json"
+//         }
+//         // Get the session information and store it in a cookie in the header
+//         searchArgs = {
+//             headers: {
+//                 // Set the cookie from the session information
+//                 cookie: session.name + '=' + session.value,
+//                 "Content-Type": "application/json"
+//             },
+//             // data: {
+//             //     // Provide additional data for the JIRA search. You can modify the JQL to search for whatever you want.
+//             //     jql: "type=Bug AND status=Closed"
+//             // }
+//         };
+//         // Make the request return the search results, passing the header information including the cookie.
+//         // client.post("http://localhost:8090/jira/rest/api/2/search", searchArgs, function (searchResult, response) {
+//         //     console.log('status code:', response.statusCode);
+//         //     console.log('search result:', searchResult);
+//         // });
+//     } else {
+//         console.log('jira logging failed')
+//         // throw "Login failed :(";
+//     }
+// }, function (err) {
+//     console.log('cannot get jira')
+// });
+
+function loginJIRA() {
+    return new Promise(function (resolve, reject) {
+        var jiraReq = client.post("http://dwsjira1.eng.diamanti.com:8080/rest/auth/1/session", loginArgs, function (data, response) {
+            if (response.statusCode == 200) {
+                console.log('succesfully logged in, session:', data.session);
+                var session = data.session;
+                jiraHeaders = {
+                    cookie: session.name + '=' + session.value,
+                    "Content-Type": "application/json"
+                }
+                // Get the session information and store it in a cookie in the header
+                searchArgs = {
+                    headers: {
+                        // Set the cookie from the session information
+                        cookie: session.name + '=' + session.value,
+                        "Content-Type": "application/json"
+                    },
+                    // data: {
+                    //     // Provide additional data for the JIRA search. You can modify the JQL to search for whatever you want.
+                    //     jql: "type=Bug AND status=Closed"
+                    // }
+                };
+                resolve();
+                // Make the request return the search results, passing the header information including the cookie.
+                // client.post("http://localhost:8090/jira/rest/api/2/search", searchArgs, function (searchResult, response) {
+                //     console.log('status code:', response.statusCode);
+                //     console.log('search result:', searchResult);
+                // });
+            } else {
+                console.log('jira logging failed')
+                reject();
+            }
+        }, function (err) {
+            console.log('cannot get jira')
+            reject();
+        });
+
+        jiraReq.on('requestTimeout', function (err) {
+            console.log('cannot get jira due to timeout')
+            reject();
+        })
+        jiraReq.on('responseTimeout', function (err) {
+            console.log('cannot get jira due to response timeout')
+            reject();
+        })
+        jiraReq.on('error', function (err) {
+            console.log('cannot get jira due to error')
+            reject();
+        })
+    });
+}
+
+
+var JIRA_URL = 'http://dwsjira1.eng.diamanti.com:8080';
+const app = express();
+const responseDelayQuick = 10;
+const responseDelayModerate = 100;
+const responseDelaySlow = 300;
+
+app.use(express.json());
+app.use('/rest/features/:id', (req, res) => {
+    var str = `?jql=type%20in%20("New%20Feature")%20AND%20fixVersion%20in%20(${req.params.id})&fields=key,summary,status&maxResults=2000`
+    // /rest/api/2/search?jql=type%20in%20("New%20Feature")%20AND%20fixVersion%20in%20(2.3.0)&fields=key,summary
+    console.log(jiraHeaders);
+    // var searchArgs = {
+    //     headers: jiraHeaders,
+    //     data: {
+    //         // Provide additional data for the JIRA search. You can modify the JQL to search for whatever you want.
+    //         jql: "type=Bug AND status=Closed"
+    //     }
+    // };
+    var jiraReq = client.get(JIRA_URL + '/rest/api/2/search' + str, searchArgs, function (searchResult, response) {
+        if (response.statusCode === 401) {
+            loginJIRA().then(function () {
+                client.get(JIRA_URL + '/rest/api/2/search' + str, searchArgs, function (searchResult2, response2) {
+                    res.send(searchResult2);
+                }, err => { console.log(err) });
+            }).catch(err => { console.log('rpomise failed'); console.log(err) })
+        } else {
+            res.send(searchResult);
+        }
+    }, err => {
+        console.log('caught error in primitive')
+    });
+    jiraReq.on('error', function (err) {
+        console.log('cannot get features due to error in fetching JIRA')
+    })
+}, err => { })
+// app.use('/rest/bugs/:id', (req, res) => {
+//     var str = `?jql=type%20in%20("Bug")%20AND%20fixVersion%20in%20(${req.params.id})&fields=key,status,priority,summary&maxResults=2000`
+//     // /rest/api/2/search?jql=type%20in%20("New%20Feature")%20AND%20fixVersion%20in%20(2.3.0)&fields=key,summary
+//     console.log(jiraHeaders);
+//     // var searchArgs = {
+//     //     headers: jiraHeaders,
+//     //     data: {
+//     //         // Provide additional data for the JIRA search. You can modify the JQL to search for whatever you want.
+//     //         jql: "type=Bug AND status=Closed"
+//     //     }
+//     // };
+//     client.get(JIRA_URL + '/rest/api/2/search' + str, searchArgs, function (searchResult, response) {
+//         console.log('status code:', response.statusCode);
+//         console.log('search result:', searchResult);
+//         res.send(searchResult);
+//     }, err => { console.log('cannot get jira') });
+// }, err => { })
+app.use('/rest/bugs/total/:id', (req, res) => {
+    var totalBugsStr = `?jql=affectedVersion%20in%20(${req.params.id})%20AND%20type%20in%20("Bug","Sub-task")&fields=key,status,priority,summary&maxResults=2000`
+    var jiraReq = client.get(JIRA_URL + '/rest/api/2/search' + totalBugsStr, searchArgs, function (searchResultTotal, response) {
+        if (response.statusCode === 401) {
+            loginJIRA().then(function () {
+                client.get(JIRA_URL + '/rest/api/2/search' + totalBugsStr, searchArgs, function (searchResultTotal2, responseTotal) {
+                    res.send(searchResultTotal2);
+                }, err1 => { console.log('cannot get jira') });
+            }).catch(err => { console.log('rpomise failed'); console.log(err) })
+        } else {
+            res.send(searchResultTotal);
+        }
+    }, err => {
+        console.log('caught error in primitive')
+    });
+    jiraReq.on('error', function (err) {
+        console.log('cannot get features due to error in fetching JIRA')
+    })
+}, err => { });
+app.use('/rest/bugs/open/:id', (req, res) => {
+    var openBugsStr = `?jql=status%20in%20("Open","In Progress","To Do","Done")%20AND%20fixVersion%20in%20(${req.params.id})%20AND%20type%20in%20("Bug","Sub-task")%20AND%20(Component!=Automation%20OR%20Component=EMPTY)&fields=key,status,priority,summary&maxResults=2000`
+    var jiraReq = client.get(JIRA_URL + '/rest/api/2/search' + openBugsStr, searchArgs, function (searchResultTotal, response) {
+        if (response.statusCode === 401) {
+            loginJIRA().then(function () {
+                client.get(JIRA_URL + '/rest/api/2/search' + openBugsStr, searchArgs, function (searchResultTotal2, responseTotal) {
+                    res.send(searchResultTotal2);
+                }, err1 => { console.log('cannot get jira') });
+            }).catch(err => { console.log('rpomise failed'); console.log(err) })
+        } else {
+            res.send(searchResultTotal);
+        }
+    }, err => {
+        console.log('caught error in primitive')
+    });
+    jiraReq.on('error', function (err) {
+        console.log('cannot get features due to error in fetching JIRA')
+    })
+}, err => { })
+app.use('/rest/bugs/resolved/:id', (req, res) => {
+    var resolvedBugsStr = `?jql=status%20in%20("Done","Resolved","Closed","Duplicate")%20AND%20fixVersion%20in%20(${req.params.id})%20AND%20type%20in%20("Bug","Sub-task")%20AND%20(Component!=Automation%20OR%20Component=EMPTY)&fields=key,status,priority,summary&maxResults=2000`
+    var jiraReq = client.get(JIRA_URL + '/rest/api/2/search' + resolvedBugsStr, searchArgs, function (searchResultTotal, response) {
+        if (response.statusCode === 401) {
+            loginJIRA().then(function () {
+                client.get(JIRA_URL + '/rest/api/2/search' + resolvedBugsStr, searchArgs, function (searchResultTotal2, responseTotal) {
+                    res.send(searchResultTotal2);
+                }, err1 => { console.log('cannot get jira') });
+            }).catch(err => { console.log('rpomise failed'); console.log(err) })
+        } else {
+            res.send(searchResultTotal);
+        }
+    }, err => {
+        console.log('caught error in primitive')
+    });
+    jiraReq.on('error', function (err) {
+        console.log('cannot get features due to error in fetching JIRA')
+    })
+}, err => { })
+app.use('/rest/featuredetail', (req, res) => {
+    var str = '?fields=key,summary,subtasks,created,progress,status,updated,priority'
+    var jiraReq = client.get(req.body.data + str, searchArgs, function (searchResultTotal, response) {
+        if (response.statusCode === 401) {
+            loginJIRA().then(function () {
+                client.get(req.body.data + str, searchArgs, function (searchResultTotal2, responseTotal) {
+                    res.send(searchResultTotal2);
+                }, err1 => { console.log('cannot get jira') });
+            }).catch(err => { console.log('rpomise failed'); console.log(err) })
+        } else {
+            res.send(searchResultTotal);
+        }
+    }, err => {
+        console.log('caught error in primitive')
+    });
+    jiraReq.on('error', function (err) {
+        console.log('cannot get features due to error in fetching JIRA')
+    })
+
+}, err => {
+
+})
+app.use('/api/release/all', (req, res) => {
+    res.send(releases);
+}, err => { })
+app.use('/user/login', (req, res) => {
+    if (req.body.email === '') {
+        res.status(401).send({ message: 'Please enter email' })
+    }
+    let user = users.filter(item => item.email === req.body.email)[0];
+    if (user.email) {
+        res.send(user)
+    } else {
+        res.status(404).send({ message: 'User not found' });
+    }
+    // if (req.body.email === 'yatish@diamanti.com' || req.body.email === 'bharati@diamanti.com' || req.body.email === 'deepak@diamanti.com' || req.body.email === 'rahul@diamanti.com') {
+    //     res.send({ role: 'ADMIN', loginTime: new Date() })
+    // } else {
+    //     res.send({ role: 'ENGG', loginTime: new Date() })
+    // }
+}, err => { })
+// send only ten before the date requested
+app.get('/user/update/:email/:startTime', (req, res) => {
+    res.send(notifications[req.params.email]);
+});
+app.get('/user/assigned/:email', (req, res) => {
+    res.send(notifications[req.params.email]);
+});
+app.get('/user/completed/:email', (req, res) => {
+    res.send(notifications[req.params.email]);
+});
+app.get('/users', (req, res) => {
+    res.send(users);
+})
+app.get('/user/:release/assigned/:email', (req, res) => {
+    let tcs = [];
+    if (assignedTCs[req.params.release] && assignedTCs[req.params.release][req.params.email]) {
+        assignedTCs[req.params.release][req.params.email].forEach(item => {
+            tcs.push(allTcs[req.params.release][item]);
+        })
+    }
+    console.log('tcs to send');
+    console.log(tcs);
+    console.log(assignedTCs);
+    res.send(tcs);
+})
+app.get('/test/:release/tcinfo/details/id/:id', (req, res) => {
+    if (allTcs && allTcs[req.params.release] && allTcs[req.params.release][req.params.id]) {
+        res.send(allTcs[req.params.release][req.params.id])
+    } else {
+        res.send({})
+    }
+});
+function addAssignee(tc, release) {
+    if (!assignedTCs[release]) {
+        assignedTCs[release] = { 'ADMIN': [] };
+    }
+    if (!tc.Assignee || tc.Assignee === 'UNASSIGNED' || tc.Status.search('COMPLETED') >= 0 || tc.Status === 'BUG') {
+        tc.Assignee = 'ADMIN';
+    }
+    if (assignedTCs[release][tc.Assignee] && !assignedTCs[release][tc.Assignee].includes(tc.TcID)) {
+        assignedTCs[release][tc.Assignee].push(tc.TcID);
+    }
+    if (!assignedTCs[release][tc.Assignee]) {
+        assignedTCs[release][tc.Assignee] = [tc.TcID];
+    }
+}
+function removeAssignee(tc, release) {
+    if (!assignedTCs[release]) {
+        return;
+    }
+    if (!tc.Assignee || tc.Assignee === 'UNASSIGNED' || tc.Status.search('COMPLETED') >= 0 || tc.Status === 'BUG') {
+        tc.Assignee = 'ADMIN';
+    }
+    if (assignedTCs[release] && assignedTCs[release][tc.Assignee]) {
+        let index = assignedTCs[release][tc.Assignee].indexOf(tc.TcID);
+        assignedTCs[release][tc.Assignee].splice(index, 1);
+    }
+}
+app.put('/test/:release/tcinfo/details/id/:id', (req, res) => {
+    if (allTcs && allTcs[req.params.release] && allTcs[req.params.release][req.params.id] &&
+        allTcs[req.params.release][req.params.id].TcID === req.body.TcID) {
+        removeAssignee(allTcs[req.params.release][req.body.TcID], req.params.release);
+        allTcs[req.params.release][req.body.TcID] = {
+            ...req.body, Activity:
+                [...allTcs[req.params.release][req.body.TcID].Activity, req.body.Activity]
+        };
+        if (req.body.ManualBuilds) {
+            if (!Array.isArray(allTcs[req.params.release][req.body.TcID].ManualBuilds)) {
+                allTcs[req.params.release][req.body.TcID].ManualBuilds = [];
+            }
+            allTcs[req.params.release][req.body.TcID] = {
+                ...allTcs[req.params.release][req.body.TcID], ManualBuilds:
+                    [...allTcs[req.params.release][req.body.TcID].ManualBuilds, req.body.ManualBuilds]
+            };
+        }
+        if (req.body.AutoBuilds) {
+            if (!Array.isArray(allTcs[req.params.release][req.body.TcID].AutoBuilds)) {
+                allTcs[req.params.release][req.body.TcID].AutoBuilds = [];
+            }
+            allTcs[req.params.release][req.body.TcID] = {
+                ...allTcs[req.params.release][req.body.TcID], AutoBuilds:
+                    [...allTcs[req.params.release][req.body.TcID].AutoBuilds, req.body.AutoBuilds]
+            };
+        }
+        addAssignee(allTcs[req.params.release][req.body.TcID], req.params.release)
+        // jsonfile.writeFileSync('./tcDetails.json', allTcs);
+        res.send({ message: 'ok' });
+    } else {
+        res.status(401).send({ 'message': 'Failed to update ' + req.params.id });
+    }
+});
+app.delete('/test/:release/tcinfo/details/id/:id', (req, res) => {
+    if (allTcs && allTcs[req.params.release] && allTcs[req.params.release][req.params.id] &&
+        allTcs[req.params.release][req.params.id].TcID === req.params.id) {
+        removeAssignee(allTcs[req.params.release][req.params.id], req.params.release);
+        allTcs[req.params.release][req.params.id] = null;
+        // jsonfile.writeFileSync('./tcDetails.json', allTcs);
+        res.send({ message: 'ok' });
+    } else {
+        res.status(401).send({ 'message': 'Failed to delete ' + req.params.id });
+    }
+});
+app.get('/test/:release/tcinfo/domains', (req, res) => {
+    res.send(domains[req.params.release]);
+})
+
+
+
+app.post('/api/tcinfo/:release', (req, res) => {
+    if (allTcs && allTcs[req.params.release]) {
+        if (allTcs[req.params.release][req.body.TcID]) {
+            res.status(401).send({ 'message': 'Duplicate TcID' });
+        } else if (allTcs[req.params.release][req.body.TcName]) {
+            res.status(401).send({ 'message': 'Duplicate TcName' });
+        } else {
+
+
+            allTcs[req.params.release][req.body.TcID] = req.body;
+            addAssignee(allTcs[req.params.release][req.body.TcID], req.params.release)
+            // jsonfile.writeFileSync('./tcDetails.json', allTcs);
+            res.send({ message: 'ok' });
+        }
+    } else {
+
+        allTcs[req.params.release] = { [req.body.TcID]: req.body };
+        addAssignee(allTcs[req.params.release][req.body.TcID], req.params.release)
+        // jsonfile.writeFileSync('./tcDetails.json', allTcs);
+        res.send({ message: 'ok' });
+    }
+});
+app.get('/api/tcinfo/:release', (req, res) => {
+    console.log('called')
+    if (allTcs && allTcs[req.params.release]) {
+        let data = Object.keys(allTcs[req.params.release]).map(item => allTcs[req.params.release][item]);
+
+        res.send(data.filter(item => item ? true : false));
+    } else {
+        res.send([]);
+    }
+});
+
+
+
+
+// app.use('/', express.static('./build'));
+// app.use('*', express.static('./build'));
+console.log('Mock Invar listening on port 5051');
+const server = app.listen('5051');
+
+var gracefulShutdown = function () {
+    console.log("Shutting down....");
+    jsonfile.writeFileSync('./tcDetails.json', allTcs);
+    jsonfile.writeFileSync('./currentAssigned.json', assignedTCs);
+    server.close(function () {
+        setTimeout(function () {
+            console.log("Terminated");
+            process.exit(0);
+        }, 10);
+    });
+}
+
+// listen for TERM signal .e.g. kill
+process.on('SIGTERM', gracefulShutdown);
+
+// listen for INT signal e.g. Ctrl-C
+process.on('SIGINT', gracefulShutdown);
+
+
+// TODO:
+// 1) tc add/edit/delete confirmation dialog
+// 2) tc delete
+// 3) tc add css
+// 4) tc view/edit on multibox change
+// 5) user remove notifications 
+// 6) user assigned work 
+
+// 8) qa strategy: update
+// 9) icons for cards
+// 10) custom sunburst over readymade
+
+// 7) user completed work
+// 11) add select options for releases
+// 12)  sanity tester for everything
+// 13) approve/unapprove
+
+// FEatures:
+// 1) if TC is created and in Created status, then only admin will be able to change the status of TC
