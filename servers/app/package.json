@@ -20,7 +20,7 @@
     "rimraf": "^3.0.0"
   },
   "devDependencies": {
-    "express": "^4.16.2",
+    "express": "^4.17.3",
     "@babel/cli": "^7.6.0",
     "@babel/core": "^7.6.0",
     "@babel/node": "^7.6.1",
